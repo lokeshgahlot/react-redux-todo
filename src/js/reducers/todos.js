@@ -32,6 +32,25 @@ export default function reducer(
         error: action.payload
       };
     break;
+
+    case 'ADD-TODO':
+      return {
+        ...state,
+          list: [].concat(state.list, [action.payload])
+      };
+    break;
+    case 'TOGGLE-TODO':
+      let t = [].concat(state.list).map((todo)=> {
+        if(todo.id === parseInt(action.payload)) {
+          todo.completed = !todo.completed
+        }
+        return todo;
+      });
+
+      return {
+        ...state,
+        list: t
+      };
   }
   return state;
 }

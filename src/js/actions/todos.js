@@ -12,12 +12,14 @@ import axios from 'axios';
 //   }
 // }
 
-export function fetchTodos() {
+let nextTodoId = 0;
 
+export function fetchTodos() {
   return (dispatch) => {
     dispatch({type: 'FETCH-TODOS-START'});
     axios.get('https://jsonplaceholder.typicode.com/todos')
       .then((response) => {
+        nextTodoId = response.data.length;
         dispatch({type: 'FETCH-TODOS-FULFILLED', payload: response.data});
       })
       .catch((err)=> {
@@ -26,16 +28,20 @@ export function fetchTodos() {
   }
 }
 
-export function addTodo(text) {
+export function addTodo(title) {
   return {
     type: 'ADD-TODO',
-    text: text
+    payload: {
+      title,
+      id: ++nextTodoId,
+      completed: false
+    }
   }
 }
 
 export function toggleTodo(id) {
   return {
     type: 'TOGGLE-TODO',
-    id: id
+    payload: id
   }
 }
